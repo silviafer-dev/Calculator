@@ -49,6 +49,27 @@ export const CalculatorScreen = () => {
     }
   };
 
+  const btnDelete = () => {
+    // let negative = '';
+    // let tempNumber = number;
+    // if (number.includes('-')) {
+    //   negative = '-';
+    //   tempNumber = number.substring(1);
+    // }
+
+    // if (tempNumber.length > 1) {
+    //   setNumber(negative + tempNumber.slice(0, -1));
+    // } else {
+    //   setNumber('0');
+    // }
+
+    if (number.length === 1 || (number.length === 2 && number.includes('-'))) {
+      return setNumber('0');
+    }
+    // setNumber(number.slice(0, -1));
+    setNumber(number.substring(0, number.length - 1));
+  };
+
   return (
     <View style={styles.calculadoraContainer}>
       <Text style={styles.resultadoPequeno}>{previousNumber}</Text>
@@ -59,7 +80,7 @@ export const CalculatorScreen = () => {
       <View style={styles.fila}>
         <ButtonCalc texto="C" color="#9b9b9b" action={clean} />
         <ButtonCalc texto="+/-" color="#9b9b9b" action={positiveNegative} />
-        <ButtonCalc texto="del" color="#9b9b9b" action={clean} />
+        <ButtonCalc texto="del" color="#9b9b9b" action={btnDelete} />
         <ButtonCalc texto="/" color="#FF9427" action={clean} />
       </View>
       <View style={styles.fila}>

@@ -7,6 +7,12 @@ export const CalculatorScreen = () => {
     <View style={styles.calculadoraContainer}>
       <Text style={styles.resultadoPequeno}>1,500.00</Text>
       <Text style={styles.resultado}>1,500.00</Text>
+      <View>
+        <View style={styles.boton}>
+          {/* BOTON */}
+          <Text style={styles.botonTexto}>1</Text>
+        </View>
+      </View>
     </View>
   );
 };

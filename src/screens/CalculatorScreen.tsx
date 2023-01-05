@@ -1,14 +1,23 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {Text, View} from 'react-native';
 import {ButtonCalc} from '../components/ButtonCalc';
 import {styles} from '../theme/appTheme';
 
+enum Operadores {
+  sumar,
+  restar,
+  multiplicar,
+  dividir,
+}
 export const CalculatorScreen = () => {
   const [number, setNumber] = useState('0');
   const [previousNumber, setPreviousNumber] = useState('0');
 
+  const ultimaOperacion = useRef<Operadores>();
+
   const clean = () => {
     setNumber('0');
+    setPreviousNumber('0');
   };
 
   const getNumber = (numberText: string) => {
@@ -70,42 +79,74 @@ export const CalculatorScreen = () => {
     setNumber(number.substring(0, number.length - 1));
   };
 
+  const cambiarNumeroPorAnterior = () => {
+    if (number.endsWith('.')) {
+      setPreviousNumber(number.slice(0, -1));
+    } else {
+      setPreviousNumber(number);
+    }
+    setNumber('0');
+  };
+
+  const btnDividir = () => {
+    cambiarNumeroPorAnterior();
+    ultimaOperacion.current = Operadores.dividir;
+  };
+
+  const btnMultiplicar = () => {
+    cambiarNumeroPorAnterior();
+    ultimaOperacion.current = Operadores.multiplicar;
+  };
+
+  const btnRestar = () => {
+    cambiarNumeroPorAnterior();
+    ultimaOperacion.current = Operadores.restar;
+  };
+
+  const btnSumar = () => {
+    cambiarNumeroPorAnterior();
+    ultimaOperacion.current = Operadores.sumar;
+  };
+
   return (
     <View style={styles.calculadoraContainer}>
-      <Text style={styles.resultadoPequeno}>{previousNumber}</Text>
+      {previousNumber !== '0' && (
+        <Text style={styles.resultadoPequeno}>{previousNumber}</Text>
+      )}
+
       <Text style={styles.resultado} numberOfLines={1} adjustsFontSizeToFit>
         {number}
       </Text>
 
       <View style={styles.fila}>
-        <ButtonCalc texto="C" color="#9b9b9b" action={clean} />
-        <ButtonCalc texto="+/-" color="#9b9b9b" action={positiveNegative} />
-        <ButtonCalc texto="del" color="#9b9b9b" action={btnDelete} />
-        <ButtonCalc texto="/" color="#FF9427" action={clean} />
+        <ButtonCalc text="C" color="#9b9b9b" action={clean} />
+        <ButtonCalc text="+/-" color="#9b9b9b" action={positiveNegative} />
+        <ButtonCalc text="del" color="#9b9b9b" action={btnDelete} />
+        <ButtonCalc text="/" color="#FF9427" action={btnDividir} />
       </View>
       <View style={styles.fila}>
-        <ButtonCalc texto="7" action={getNumber} />
-        <ButtonCalc texto="8" action={getNumber} />
-        <ButtonCalc texto="9" action={getNumber} />
-        <ButtonCalc texto="x" color="#FF9427" action={clean} />
+        <ButtonCalc text="7" action={getNumber} />
+        <ButtonCalc text="8" action={getNumber} />
+        <ButtonCalc text="9" action={getNumber} />
+        <ButtonCalc text="x" color="#FF9427" action={btnMultiplicar} />
       </View>
       <View style={styles.fila}>
-        <ButtonCalc texto="4" action={getNumber} />
-        <ButtonCalc texto="5" action={getNumber} />
-        <ButtonCalc texto="6" action={getNumber} />
-        <ButtonCalc texto="-" color="#FF9427" action={clean} />
+        <ButtonCalc text="4" action={getNumber} />
+        <ButtonCalc text="5" action={getNumber} />
+        <ButtonCalc text="6" action={getNumber} />
+        <ButtonCalc text="-" color="#FF9427" action={btnRestar} />
       </View>
       <View style={styles.fila}>
-        <ButtonCalc texto="1" action={getNumber} />
-        <ButtonCalc texto="2" action={getNumber} />
-        <ButtonCalc texto="3" action={getNumber} />
-        <ButtonCalc texto="+" color="#FF9427" action={clean} />
+        <ButtonCalc text="1" action={getNumber} />
+        <ButtonCalc text="2" action={getNumber} />
+        <ButtonCalc text="3" action={getNumber} />
+        <ButtonCalc text="+" color="#FF9427" action={btnSumar} />
       </View>
       <View style={styles.fila}>
-        <ButtonCalc texto="0" ancho action={getNumber} />
-        <ButtonCalc texto="." action={getNumber} />
+        <ButtonCalc text="0" ancho action={getNumber} />
+        <ButtonCalc text="." action={getNumber} />
 
-        <ButtonCalc texto="=" color="#FF9427" action={clean} />
+        <ButtonCalc text="=" color="#FF9427" action={clean} />
       </View>
     </View>
   );
